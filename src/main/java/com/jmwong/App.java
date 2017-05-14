@@ -7,6 +7,7 @@ import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
 import com.amazonaws.services.sqs.buffered.AmazonSQSBufferedAsyncClient;
 import com.amazonaws.services.sqs.buffered.QueueBufferConfig;
+import com.amazonaws.services.sqs.model.CreateQueueResult;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import kafka.consumer.*;
 import kafka.javaapi.consumer.ConsumerConnector;
@@ -35,6 +36,9 @@ public class App {
         final AmazonSQSBufferedAsyncClient asyncClient = new AmazonSQSBufferedAsyncClient(client, conf);
 
 
+//      CreateQueueResult result = client.createQueue("test");
+//      System.out.println(result);
+//
 
         String QUEUE_NAME = "test";
         final String queueUrl = asyncClient.getQueueUrl(QUEUE_NAME).getQueueUrl();
@@ -94,9 +98,6 @@ public class App {
             });
         }
 
-
-//      CreateQueueResult result = client.createQueue("test");
-//      System.out.println(result);
 
     }
 }

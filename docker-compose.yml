@@ -1,6 +1,11 @@
 version: "3.2"
 
 services:
+  elasticmq:
+    image: fingershock/elasticmq:0.13.2
+    ports:
+      - "9324:9324"
+
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
