@@ -17,6 +17,7 @@ import kafka.utils.VerifiableProperties;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,10 +26,18 @@ import java.util.concurrent.TimeUnit;
 public class App {
     private static Logger logger = Logger.getLogger(App.class);
 
+
+
     public static void main(String[] args) {
+        Map<String, String> envVars = System.getenv();
+
+        final String elasticmqHost = envVars.getOrDefault("ELASTICMQ_HOST", "localhost");
+        final String zookeeperHost = envVars.getOrDefault("ZK_HOST", "localhost");
+
+
         AmazonSQSAsync client = AmazonSQSAsyncClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("", "")))
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:9324", ""))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://"+elasticmqHost+":9324", ""))
                 .build();
 
         QueueBufferConfig conf = new QueueBufferConfig()
@@ -38,14 +47,14 @@ public class App {
 
 //      CreateQueueResult result = client.createQueue("test");
 //      System.out.println(result);
-//
+
 
         String QUEUE_NAME = "test";
         final String queueUrl = asyncClient.getQueueUrl(QUEUE_NAME).getQueueUrl();
 
 
         Properties props = new Properties();
-        props.put("zookeeper.connect", "localhost:2181");
+        props.put("zookeeper.connect", zookeeperHost + ":2181");
         props.put("group.id", "jmwong-test");
         ConsumerConfig consumerConf = new ConsumerConfig(props);
 
